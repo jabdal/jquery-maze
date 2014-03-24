@@ -1,0 +1,82 @@
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<body>
+
+<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+<script>
+ var path = 0;
+ var pos2 = [];
+function shuffle(o){
+    for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+}; 
+
+function visit(tbl,r,c){
+  var t = tbl[0];
+  if(r>24 || c>24 || r<0 || c <0)
+  alert(r+','+c);
+  var cell = t.rows[r].cells[c];
+  cell.innerText='v'
+  $(cell).attr('data-path',++path);
+  var pos = [];
+  
+  if(r+1 < t.rows.length && t.rows[r+1].cells[c].innerText!=='v') pos.push({r:r+1,c:c,d:'sn'});
+  if(r-1 >= 0 && t.rows[r-1].cells[c].innerText!=='v') pos.push({r:r-1,c:c,d:'ns'});
+  if(c+1 < t.rows.length && t.rows[r].cells[c+1].innerText!=='v') pos.push({r:r,c:c+1,d:'ew'});
+  if(c-1 >= 0 && t.rows[r].cells[c-1].innerText!=='v') pos.push({r:r,c:c-1,d:'we'});
+  
+  shuffle(pos);
+  
+  if(!pos.length){
+      shuffle(pos2);
+      if(!pos2.length)return;
+      var rr = pos2[0].r;
+      var cc = pos2[0].c
+      pos2.splice(0, 1);
+      visit(tbl,rr,cc)
+  }else if(pos.length>1){
+    pos2.push(pos[0]);
+  }
+  
+  
+  for(var idx in pos){
+    $(cell).removeClass(pos[idx].d[0]);
+    var r2 = pos[idx].r
+    var c2 = pos[idx].c;
+    var cell2 = t.rows[r2].cells[c2];
+    $(cell2).removeClass(pos[idx].d[1]);
+    visit(tbl,r2,c2);
+    break;
+  }
+}
+
+function rand(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+$(function(){
+  var size = 25;
+
+  $(document.body).append("<table id='tbl'/>")
+  var tbl = $('#tbl');
+  for(r=0;r<size;r++){
+    var tr = $('<tr/>');
+    for(c=0;c<size;c++){
+        tr.append( "<td class='n s e w'></td>");
+    }
+    tbl.append(tr);
+  }
+
+  visit(tbl,rand(0,size-1),rand(0,size-1));
+
+});
+</script>
+<style>
+.n{border-top:1px solid black}
+.s{border-bottom:1px solid black}
+.e{border-right:1px solid black}
+.w{border-left:1px solid black}
+table{border-collapse:collapse;}
+td{width:15px;height:15px}
+</style>
+
+</body>
