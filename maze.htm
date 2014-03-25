@@ -1,11 +1,13 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <html>
 <body>
 <script src="jquery-1.9.1.min.js"></script>
 <script>
-var backtrack = false, debug = true, path = 0, pos2 = [];
+var backtrack = false, debug = false, path = 0, pos2 = [];
 
 $(function(){
-  var size = 25;
+  var size = 50;
   $(document.body).append("<table id='tbl'/>")
   var tbl = $('#tbl');
   for(r=0;r<size;r++){
@@ -20,8 +22,6 @@ $(function(){
 
 function visit(tbl,r,c){
   var t = tbl[0];
-  if(r>24 || c>24 || r<0 || c <0)
-  alert(r+','+c);
   var cell = t.rows[r].cells[c];
   //represent the start position
   if(path==0) 
